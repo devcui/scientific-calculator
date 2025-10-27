@@ -36,7 +36,7 @@ equation // 表达式 比较运算符 表达式
     ;
 
 printStmt // 输出语句 print(表达式)
-    : 'print' LPAREN expr RPAREN
+    : PRINT LPAREN expr RPAREN
     ;
 
 exprStmt // 表达式语句 仅包含表达式
@@ -48,19 +48,19 @@ exprStmt // 表达式语句 仅包含表达式
 // ─────────────────────────────────────────────────────────────
 // Logical OR
 expr // 优先级最低 因为在最外层
-    : expr 'or' expr2 // 递归 左右或运算 
+    : expr OR expr2 // 递归 左右或运算 
     | expr2 // 如果没有 or 则进入下一层
     ;
 
 // Logical AND
 expr2 // 优先级 第二低 在or里层
-    : expr2 'and' expr3 // 递归 左右与运算
+    : expr2 AND expr3 // 递归 左右与运算
     | expr3  // 如果没有 and 则进入下一层
     ;
 
 // NOT
 expr3 // 优先级 第三低 在and里层
-    : 'not' expr3 // 递归 非运算
+    : NOT expr3 // 递归 非运算
     | comparison // 如果没有 not 则进入下一层
     ;
 
@@ -211,3 +211,8 @@ BLOCK_COMMENT : '/*' .*? '*/' -> skip ;
 // Whitespace
 WS : [ \t\r]+ -> skip ;
 NEWLINE : '\r'? '\n' ;
+
+PRINT: 'print';
+OR : 'or';
+AND : 'and';
+NOT : 'not';

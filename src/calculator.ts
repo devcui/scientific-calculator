@@ -185,25 +185,23 @@ export class Caluctor implements CalculatorVisitor<RuntimeValue | undefined> {
   }
 
   visitExpr(ctx: ExprContext): RuntimeValue {
-    if (ctx.expr()) {
-      const left = ctx.expr()!.accept(this);
+    if (ctx.OR()) {
+      const left = this.evaluate(ctx.expr()!);
       if (this.isTruthy(left)) {
         return true;
       }
-      const right = this.evaluate(ctx.expr2());
-      return this.isTruthy(right);
+      return this.isTruthy(this.evaluate(ctx.expr2()));
     }
     return this.evaluate(ctx.expr2());
   }
 
   visitExpr2(ctx: Expr2Context): RuntimeValue {
-    if (ctx.expr2()) {
-      const left = ctx.expr2()!.accept(this);
+    if (ctx.AND()) {
+      const left = this.evaluate(ctx.expr2()!);
       if (!this.isTruthy(left)) {
         return false;
       }
-      const right = this.evaluate(ctx.expr3());
-      return this.isTruthy(right);
+      return this.isTruthy(this.evaluate(ctx.expr3()));
     }
     return this.evaluate(ctx.expr3());
   }
@@ -284,23 +282,15 @@ export class Caluctor implements CalculatorVisitor<RuntimeValue | undefined> {
   }
 
   visitAtom(ctx: AtomContext): RuntimeValue {
-    if (ctx.NUMBER()) {
-      return this.parseNumber(ctx.NUMBER()!.text);
+    if (ctx.atom()) {
+      const value = this.evaluate(ctx.atom()!);
+      return this.factorial(value);
     }
-    if (ctx.IMAG()) {
-      return this.parseImag(ctx.IMAG()!.text);
-    }
-    if (ctx.ID()) {
-      return this.resolveIdentifier(ctx.ID()!.text);
-    }
-    if (ctx.constant()) {
-      return this.evaluate(ctx.constant()!);
+    if (ctx.implicitMul()) {
+      return this.evaluate(ctx.implicitMul()!);
     }
     if (ctx.functionCall()) {
       return this.evaluate(ctx.functionCall()!);
-    }
-    if (ctx.expr()) {
-      return this.evaluate(ctx.expr()!);
     }
     if (ctx.vector()) {
       return this.evaluate(ctx.vector()!);
@@ -308,12 +298,20 @@ export class Caluctor implements CalculatorVisitor<RuntimeValue | undefined> {
     if (ctx.matrix()) {
       return this.evaluate(ctx.matrix()!);
     }
-    if (ctx.implicitMul()) {
-      return this.evaluate(ctx.implicitMul()!);
+    if (ctx.expr()) {
+      return this.evaluate(ctx.expr()!);
     }
-    if (ctx.atom()) {
-      const value = this.evaluate(ctx.atom()!);
-      return this.factorial(value);
+    if (ctx.constant()) {
+      return this.evaluate(ctx.constant()!);
+    }
+    if (ctx.ID()) {
+      return this.resolveIdentifier(ctx.ID()!.text);
+    }
+    if (ctx.IMAG()) {
+      return this.parseImag(ctx.IMAG()!.text);
+    }
+    if (ctx.NUMBER()) {
+      return this.parseNumber(ctx.NUMBER()!.text);
     }
     throw new Error(`Unsupported atom: ${ctx.text}`);
   }

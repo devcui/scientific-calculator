@@ -29,25 +29,29 @@ export function main() {
     // 隐式乘法与复数
     var x = 2(3 + 4);
     print(x);
+    var y = 3a;
+    print(y);
+    var z = a(5 + 1);
+    print(z);
+    var u = pi a;
+    print(u);
+    var v = a b;
+    print(v);
     print(2i * 2i);
 
-    // 幂和阶乘
+    // 幂与阶乘
     print(2 ^ 5);
     print(5!);
+    print((a + b)!);
 
     // 向量与矩阵
-    var vec = [1, 2, 3];
-    var mat = [ [1, 2]; [3, 4] ];
+  var vec = [1, 2, 3];
+  var mat = [1, 2; 3, 4];
     print(vec);
     print(mat);
-    print(len(vec));
     print(sum(vec));
-
-    // 变量与等式
-    var y = angle;
-    y = y - pi / 2;
-    print(y == 0);
-`);
+    print(len(mat));
+  `);
   // 词法解析
   const lexer = new CalculatorLexer(inputStream);
   // Token流

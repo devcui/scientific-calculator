@@ -2,123 +2,183 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { ProgramContext, StatementContext, DefineStmtContext, AssignmentContext, EquationStmtContext, EquationContext, PrintStmtContext, ExprStmtContext, ExprContext, Expr2Context, Expr3Context, ComparisonContext, ArithContext, TermContext, FactorContext, UnaryContext, AtomContext, ImplicitMulContext, FunctionCallContext, ArgListContext, ConstantContext, VectorContext, MatrixContext, RowContext, ExprListContext } from "../generated/grammar/CalculatorParser";
+import {
+  ProgramContext,
+  StatementContext,
+  DefineStmtContext,
+  AssignmentContext,
+  EquationStmtContext,
+  EquationContext,
+  PrintStmtContext,
+  ExprStmtContext,
+  ExprContext,
+  Expr2Context,
+  Expr3Context,
+  ComparisonContext,
+  ArithContext,
+  TermContext,
+  FactorContext,
+  UnaryContext,
+  AtomContext,
+  ImplicitMulContext,
+  FunctionCallContext,
+  ArgListContext,
+  ConstantContext,
+  VectorContext,
+  MatrixContext,
+  RowContext,
+  ExprListContext,
+} from "../generated/grammar/CalculatorParser";
 import { CalculatorVisitor } from "../generated/grammar/CalculatorVisitor";
 
-export class Caluctor implements CalculatorVisitor<number | string | boolean> {
-    visitProgram(ctx: ProgramContext): string | number | boolean {
-        return 0; 
-    }
+type RuntimeValue = number | boolean | string | RuntimeValue[];
 
-    visitStatement(ctx: StatementContext): string | number | boolean {
-        return 0;
+export class Caluctor implements CalculatorVisitor<RuntimeValue | undefined> {
+  visitProgram(ctx: ProgramContext): RuntimeValue |undefined {
+    let last: RuntimeValue | undefined;
+    for (const stmt of ctx.statement()) {
+      last = this.visit(stmt);
     }
+    return last;
+  }
 
-    visitDefineStmt(ctx: DefineStmtContext): string | number | boolean {
-        return 0;
-    }
+  visitStatement(ctx: StatementContext): RuntimeValue |undefined{
+    if(ctx.defineStmt()) return this.visitDefineStmt(ctx.defineStmt()!);
+    if(ctx.assignment()) return this.visitAssignment(ctx.assignment()!);
+    if(ctx.equationStmt()) return this.visitEquationStmt(ctx.equationStmt()!);
+    if(ctx.printStmt()) return this.visitPrintStmt(ctx.printStmt()!);
+    if(ctx.exprStmt()) return this.visitExprStmt(ctx.exprStmt()!);
+    return undefined; 
+  }
 
-    visitAssignment(ctx: AssignmentContext): string | number | boolean {
-        return 0;
-    }
+  visitDefineStmt(ctx: DefineStmtContext): RuntimeValue {
+    console.log("Visiting DefineStmt", ctx.text);
+    return 0;
+  }
 
-    visitEquationStmt(ctx: EquationStmtContext): string | number | boolean {
-        return 0;
-    }
+  visitAssignment(ctx: AssignmentContext): RuntimeValue {
+    console.log("Visiting Assignment", ctx.text);
+    return 0;
+  }
 
-    visitEquation(ctx: EquationContext): string | number | boolean {
-        return 0;
-    }
+  visitEquationStmt(ctx: EquationStmtContext): RuntimeValue {
+    console.log("Visiting EquationStmt", ctx.text);
+    return 0;
+  }
 
-    visitPrintStmt(ctx: PrintStmtContext): string | number | boolean {
-        return 0;
-    }
+  visitEquation(ctx: EquationContext): RuntimeValue {
+    console.log("Visiting Equation", ctx.text);
+    return 0;
+  }
 
-    visitExprStmt(ctx: ExprStmtContext): string | number | boolean {
-        return 0;
-    }
+  visitPrintStmt(ctx: PrintStmtContext): RuntimeValue {
+    console.log("Visiting PrintStmt", ctx.text);
+    return 0;
+  }
 
-    visitExpr(ctx: ExprContext): string | number | boolean {
-        return 0;
-    }
+  visitExprStmt(ctx: ExprStmtContext): RuntimeValue {
+    console.log("Visiting ExprStmt", ctx.text);
+    return 0;
+  }
 
-    visitExpr2(ctx: Expr2Context): string | number | boolean {
-        return 0;
-    }
+  visitExpr(ctx: ExprContext): RuntimeValue {
+    console.log("Visiting Expr", ctx.text);
+    return 0;
+  }
 
-    visitExpr3(ctx: Expr3Context): string | number | boolean {
-        return 0;
-    }
+  visitExpr2(ctx: Expr2Context): RuntimeValue {
+    console.log("Visiting Expr2", ctx.text);
+    return 0;
+  }
 
-    visitComparison(ctx: ComparisonContext): string | number | boolean {
-        return false;
-    }
+  visitExpr3(ctx: Expr3Context): RuntimeValue {
+    console.log("Visiting Expr3", ctx.text);
+    return 0;
+  }
 
-    visitArith(ctx: ArithContext): string | number | boolean {
-        return 0;
-    }
+  visitComparison(ctx: ComparisonContext): RuntimeValue {
+    console.log("Visiting Comparison", ctx.text);
+    return false;
+  }
 
-    visitTerm(ctx: TermContext): string | number | boolean {
-        return 0;
-    }
+  visitArith(ctx: ArithContext): RuntimeValue {
+    console.log("Visiting Arith", ctx.text);
+    return 0;
+  }
 
-    visitFactor(ctx: FactorContext): string | number | boolean {
-        return 0;
-    }
+  visitTerm(ctx: TermContext): RuntimeValue {
+    console.log("Visiting Term", ctx.text);
+    return 0;
+  }
 
-    visitUnary(ctx: UnaryContext): string | number | boolean {
-        return 0;
-    }
+  visitFactor(ctx: FactorContext): RuntimeValue {
+    console.log("Visiting Factor", ctx.text);
+    return 0;
+  }
 
-    visitAtom(ctx: AtomContext): string | number | boolean {
-        return 0;
-    }
+  visitUnary(ctx: UnaryContext): RuntimeValue {
+    console.log("Visiting Unary", ctx.text);
+    return 0;
+  }
 
-    visitImplicitMul(ctx: ImplicitMulContext): string | number | boolean {
-        return 0;
-    }
+  visitAtom(ctx: AtomContext): RuntimeValue {
+    console.log("Visiting Atom", ctx.text);
+    return 0;
+  }
 
-    visitFunctionCall(ctx: FunctionCallContext): string | number | boolean {
-        return 0;
-    }
+  visitImplicitMul(ctx: ImplicitMulContext): RuntimeValue {
+    console.log("Visiting ImplicitMul", ctx.text);
+    return 0;
+  }
 
-    visitArgList(ctx: ArgListContext): string | number | boolean {
-        return 0;
-    }
+  visitFunctionCall(ctx: FunctionCallContext): RuntimeValue {
+    console.log("Visiting FunctionCall", ctx.text);
+    return 0;
+  }
 
-    visitConstant(ctx: ConstantContext): string | number | boolean {
-        return 0;
-    }
+  visitArgList(ctx: ArgListContext): RuntimeValue {
+    console.log("Visiting ArgList", ctx.text);
+    return 0;
+  }
 
-    visitVector(ctx: VectorContext): string | number | boolean {
-        return 0;
-    }
+  visitConstant(ctx: ConstantContext): RuntimeValue {
+    console.log("Visiting Constant", ctx.text);
+    return 0;
+  }
 
-    visitMatrix(ctx: MatrixContext): string | number | boolean {
-        return 0;
-    }
+  visitVector(ctx: VectorContext): RuntimeValue {
+    console.log("Visiting Vector", ctx.text);
+    return 0;
+  }
 
-    visitRow(ctx: RowContext): string | number | boolean {
-        return 0;
-    }
+  visitMatrix(ctx: MatrixContext): RuntimeValue {
+    console.log("Visiting Matrix", ctx.text);
+    return 0;
+  }
 
-    visitExprList(ctx: ExprListContext): string | number | boolean {
-        return 0;
-    }
+  visitRow(ctx: RowContext): RuntimeValue {
+    console.log("Visiting Row", ctx.text);
+    return 0;
+  }
 
-    visit(tree: ParseTree): string | number | boolean {
-        return 0;
-    }
+  visitExprList(ctx: ExprListContext): RuntimeValue {
+    console.log("Visiting ExprList", ctx.text);
+    return 0;
+  }
 
-    visitChildren(node: RuleNode): string | number | boolean {
-        return 0;
-    }
+  visit(tree: ParseTree): RuntimeValue {
+    return tree.accept(this);
+  }
 
-    visitTerminal(node: TerminalNode): string | number | boolean {
-        return node.text;  
-    }
+  visitChildren(node: RuleNode): RuntimeValue {
+    return 0;
+  }
 
-    visitErrorNode(node: ErrorNode): string | number | boolean {
-        return "Error";  
-    }
+  visitTerminal(node: TerminalNode): RuntimeValue {
+    return node.text;
+  }
+
+  visitErrorNode(node: ErrorNode): RuntimeValue {
+    return "Error";
+  }
 }

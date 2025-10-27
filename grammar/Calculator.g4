@@ -7,13 +7,13 @@ program
     : statement* EOF
     ;
 
-statement // 语法规则 statement 可以是以下几种情况
-    : defineStmt NEWLINE? // 定义语句 可选换行
-    | assignment NEWLINE? // 赋值语句 可选换行
-    | equationStmt NEWLINE? // 比较语句 可选换行
-    | printStmt NEWLINE? // 打印语句 可选换行
-    | exprStmt NEWLINE? // 表达式语句 可选换行
-    | NEWLINE // 空行
+statement
+    : defineStmt (SEMICOLON | NEWLINE)?
+    | assignment (SEMICOLON | NEWLINE)?
+    | equationStmt (SEMICOLON | NEWLINE)?
+    | printStmt (SEMICOLON | NEWLINE)?
+    | exprStmt (SEMICOLON | NEWLINE)?
+    | NEWLINE
     ;
 
 // ─────────────────────────────────────────────────────────────
@@ -169,17 +169,22 @@ VAR : 'var';
 PI : 'pi';
 E  : 'e';
 
+PRINT: 'print';
+OR : 'or';
+AND : 'and';
+NOT : 'not';
+
 ID : [a-zA-Z_][a-zA-Z0-9_]* ;
 
 // Complex number literal: 2i, 3.5i, .5i, 1e3i
-IMAG : (DECIMAL | HEX | BIN | OCT) [iI] ;
+IMAG : (DECIMAL_LITERAL | HEX_LITERAL | BIN_LITERAL | OCT_LITERAL) [iI] ;
 
-BIN : '0' [bB] [01]+ ;  // 0b1010
-OCT : '0' [oO] [0-7]+ ; // 0o755
-HEX : '0' [xX] [0-9a-fA-F]+ ; // 0x1A3F
-DECIMAL : [0-9]+ ('.' [0-9]*)? ([eE][+-]?[0-9]+)? | '.' [0-9]+ ([eE][+-]?[0-9]+)? ; 
+NUMBER : DECIMAL_LITERAL | HEX_LITERAL | BIN_LITERAL | OCT_LITERAL ;
 
-NUMBER : BIN | OCT | HEX | DECIMAL ;
+fragment BIN_LITERAL : '0' [bB] [01]+ ;  // 0b1010
+fragment OCT_LITERAL : '0' [oO] [0-7]+ ; // 0o755
+fragment HEX_LITERAL : '0' [xX] [0-9a-fA-F]+ ; // 0x1A3F
+fragment DECIMAL_LITERAL : [0-9]+ ('.' [0-9]*)? ([eE][+-]?[0-9]+)? | '.' [0-9]+ ([eE][+-]?[0-9]+)? ;
 
 PLUS : '+' ;
 MINUS : '-' ;
@@ -212,7 +217,3 @@ BLOCK_COMMENT : '/*' .*? '*/' -> skip ;
 WS : [ \t\r]+ -> skip ;
 NEWLINE : '\r'? '\n' ;
 
-PRINT: 'print';
-OR : 'or';
-AND : 'and';
-NOT : 'not';

@@ -1,0 +1,33 @@
+{
+  "name": "compilers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "antlr": "antlr4ts -visitor grammar/*.g4 -o generated",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devcui/compilers.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devcui/compilers/issues"
+  },
+  "homepage": "https://github.com/devcui/compilers#readme",
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4"
+  }
+}
